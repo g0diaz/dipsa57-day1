@@ -21,7 +21,29 @@ jobs:
 
     - name: echo github context
       id: echo_github_context
-      run: echo "ref_name ${{github.ref_name}} \n respository ${{github.repository}} \n owner ${{github.repository_owner}}"  
+      run: echo "ref_name ${{github.ref_name}}  respository ${{github.repository}}  owner ${{github.repository_owner}}"
+    
+    - name: fail the job
+      id: fail_the_job
+      run: exit 0
+      
+    - name: echo second github context
+      id: echo_second_github_context
+      run: echo "job_name ${{github.job}}"  
+
+    - name: Send mail
+      id: send_email
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: ${{secrets.EMAIL_SERVER}}
+        server_port: ${{secrets.EMAIL_PORT}}
+        username: ${{secrets.EMAIL_USER}}
+        password: ${{secrets.EMAIL_PASSWORD}}
+        to: 68906a45-ed0d-4eb3-ad35-a1cd5413704a@mailslurp.mx
+        from: diaz@gmail.com
+        subject: "Github workflow from ${{github.ref_name}}"
+        body: "The job is ${{job.status}}"
+    
 
   #another job
   #my_second_job:
